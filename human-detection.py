@@ -59,21 +59,4 @@ for image_name in images:
     hog_features = histogram_oriented_gradient_features(grayscale_conversion_image, n_orientations=9,
     pixels_per_cell=(8, 8),  cells_per_block=(2, 2))
 
-    hog_features_check = hog(
-        img, orientations=9,
-        pixels_per_cell=(8, 8), cells_per_block=(2, 2),
-        block_norm='L2')
-
-assert hog_features.shape == hog_features_check.shape
-print(np.allclose(hog_features, hog_features_check))
-print(hog_features.shape)
-
-print('check')
-   
-    # print("Performing non-maxima suppression for image: " + output_image_name)
-    # NMS = perform_non_maxima_suppression(args, output_image_name, M, THETA)
-
-    # print("Performing thresholding for image: " + output_image_name, '\n')
-    # T1, T2, T3 = perform_thresholding(args, output_image_name, NMS)
-
 
