@@ -1,3 +1,10 @@
+'''
+Computer Vision Midterm Project
+Project group members:  
+    1. Aniket Bote (N12824308)
+    2. Sindhu Harish (N19806874)
+'''
+
 import numpy as np
 from collections import Counter
 
@@ -46,7 +53,7 @@ class KNNClassifier:
         for i in range(X_test.shape[0]):
             # Compute histogram overlap
             histogram_overlap = self.compute_histogram_overlap(X_test[i])
-
+        
             # Create list of tuple containing label, overlap value, index ie [(1, 0.77, 0), (0, 0.55, 1), (1, 0.88, 2), (0, 0.99, 3)]
             similarity = list(zip(self.y, histogram_overlap, range(self.n)))
 

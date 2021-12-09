@@ -4,14 +4,9 @@ Project group members:
     1. Aniket Bote (N12824308)
     2. Sindhu Harish (N19806874)
 '''
-
-import os
-
-import cv2
+# Import the required libraries
 import numpy as np
-
 from utils import Operator, apply_discrete_convolution
-
 
 def perform_gradient_operation(image):
     '''
@@ -24,23 +19,14 @@ def perform_gradient_operation(image):
     # Compute horizontal gradients
     dfdx = apply_discrete_convolution(image, Operator.gx)
 
-    #Copy Image to Output folder after horizontal gradient
-    # cv2.imwrite(os.path.join(args.output_folder, image_name + '_Gx_normalized.bmp'), dfdx)
-
     # Compute vertical gradients
     dfdy = apply_discrete_convolution(image, Operator.gy)
-
-    #Copy Image to Output folder after vertical gradient
-    # cv2.imwrite(os.path.join(args.output_folder, image_name + '_Gy_normalized.bmp'), dfdy)
 
     # Compute magnitude of the gradient
     m = np.sqrt(np.square(dfdx) + np.square(dfdy))
     
     # Normalize gradient magnitude
     m = np.absolute(m) / 255.0
-    
-    #Copy Image to Output folder with gradient magnitude value
-    # cv2.imwrite(os.path.join(args.output_folder, image_name + '_gradient_magnitude_normalized.bmp'), m)
 
     # Compute gradient angle
     theta = abs(np.degrees(np.arctan2(dfdy, dfdx)))

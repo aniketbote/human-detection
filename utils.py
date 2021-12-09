@@ -21,31 +21,6 @@ class Operator:
         [0,0,0],
         [-1,-1,-1]])
 
-    # Gaussian mask
-    gaussian_mask = np.array([
-        [1,1,2,2,2,1,1],
-        [1,2,2,4,2,2,1],
-        [2,2,4,8,4,2,2],
-        [2,4,8,16,8,4,2],
-        [2,2,4,8,4,2,2],
-        [1,2,2,4,2,2,1],
-        [1,1,2,2,2,1,1]])
-
-# A class to store sector angle definitions and method to provide sector based on angle
-class Sector():
-    def __init__(self):
-        # Dictionary with {sector: sector range}
-        self.sector = {0: [(0, 22.5),(337.5,360),(157.5,202.5)], 1: [(22.5,67.5), (202.5,247.5)], 2:[(67.5,112.5), (247.5, 292.5)], 3:[(112.5, 157.5), (292.5,337.5)]}
-
-    def get_sector(self, angle):
-        for key, val in self.sector.items():
-            for l,u in val:
-                # check if angle lies in the range if yes return key
-                if angle >= l and angle < u:
-                    return key
-        # If angle is not in any range we return -1. (Not going to happen. Its there for correctness)
-        return -1
-
 # A function to apply dicreet convolutions
 def apply_discrete_convolution(image, mask):
     '''
