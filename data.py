@@ -1,9 +1,16 @@
-import os
+'''
+Computer Vision Midterm Project
+Project group members:  
+    1. Aniket Bote (N12824308)
+    2. Sindhu Harish (N19806874)
+'''
 
+# Import the required libraries
+import os
 import numpy as np
-from skimage.feature import hog
-from skimage.color import rgb2gray
 from skimage.io import imread
+from histogram_oriented_gradient_feature import histogram_oriented_gradient_features
+from perform_grayscale_conversion import grayscale_conversion 
 
 def load_data(path):
     '''
@@ -23,11 +30,10 @@ def load_data(path):
     # Iterate over all the images in path
     for image in os.listdir(path):
         # Read and convert the images to grayscale
-        img = rgb2gray(imread(os.path.join(path,image)))
+        img = grayscale_conversion(imread(os.path.join(path,image)))
 
         # Compute hog features
-        fd = hog(img, orientations=9, pixels_per_cell=(8, 8), cells_per_block=(2, 2))
-
+        fd = histogram_oriented_gradient_features(img, n_orientations=9, pixels_per_cell=(8, 8),  cells_per_block=(2, 2))
         # Add hog features to matrix
         matrix.append(fd)
         

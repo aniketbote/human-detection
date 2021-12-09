@@ -1,3 +1,11 @@
+'''
+Computer Vision Midterm Project
+Project group members:  
+    1. Aniket Bote (N12824308)
+    2. Sindhu Harish (N19806874)
+'''
+
+# Import the required libraries
 from data import create_dataset
 from knn import KNNClassifier
 from output import generate_table
