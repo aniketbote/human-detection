@@ -93,14 +93,18 @@ def histogram_oriented_gradient_features(image: np.ndarray,
     hog_cells = np.zeros((n_cells_along_x_axis, n_cells_along_y_axis, n_orientations))
 
     x_value = 0
-    
-    # Compute HOG of each cell
+
+    # Compute HOG of each cell by iterating along X and Y cells
     for it_x in range(n_cells_along_y_axis):
         y_value = 0
         for it_y in range(n_cells_along_x_axis):
+            #Calculate magnitude of cell or 8 * 8 pixels by adding vertical and horizontal gradient
             magnitudes_patch = magnitudes[y_value:y_value + pixels_per_cell_y, x_value:x_value + pixels_per_cell_x]
-            orientations_patch = orientations[y_value:y_value + pixels_per_cell_y, x_value:x_value + pixels_per_cell_x]
 
+            #Calculate gradient angle of cells
+            orientations_patch = orientations[y_value:y_value + pixels_per_cell_y, x_value:x_value + pixels_per_cell_x]
+            
+            #Calculate hog of cells
             hog_cells[it_y, it_x] = calculate_hog_feature_of_cell(n_orientations, magnitudes_patch, orientations_patch)
 
             y_value += pixels_per_cell_y
@@ -109,10 +113,14 @@ def histogram_oriented_gradient_features(image: np.ndarray,
     # hog_blocks_normalized = np.zeros((n_blocks_along_x_axis, n_blocks_along_y_axis, n_orientations))
     hog_blocks_normalized = np.zeros((n_blocks_along_x_axis, n_blocks_along_y_axis, cells_per_block_x, cells_per_block_y, n_orientations))
 
-    # Normalize HOG by block
+    # Normalize HOG by block by iterating along X and Y axes
     for it_blocksx in range(n_blocks_along_y_axis):
         for it_blocky in range(n_blocks_along_x_axis):
+
+            #calcualte hog block by using block size 16*16 pixels or (2*2 cells)
             hog_block = hog_cells[it_blocky:it_blocky + cells_per_block_y, it_blocksx:it_blocksx + cells_per_block_x]
+
+            #Apply L2 normalization
             hog_blocks_normalized[it_blocky, it_blocksx] = L2_normalize(hog_block)
 
     return hog_blocks_normalized.ravel()
