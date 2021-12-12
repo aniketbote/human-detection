@@ -9,6 +9,7 @@ Project group members:
 import os
 import numpy as np
 from skimage.io import imread
+from skimage.feature import hog
 from histogram_oriented_gradient_feature import histogram_oriented_gradient_features
 from perform_grayscale_conversion import grayscale_conversion 
 
@@ -34,6 +35,16 @@ def load_data(path):
 
         # Compute hog features
         fd = histogram_oriented_gradient_features(img, n_orientations=9, pixels_per_cell=(8, 8),  cells_per_block=(2, 2))
+
+        hog_features_check = hog(
+        img, orientations=9,
+        pixels_per_cell=(8, 8), cells_per_block=(2, 2),
+        block_norm='L2')
+
+        assert fd.shape == hog_features_check.shape
+        print(np.allclose(fd, hog_features_check))
+        print(fd.shape)
+        
         # Add hog features to matrix
         matrix.append(fd)
         
@@ -81,3 +92,5 @@ if __name__ == "__main__":
     X_train, y_train, image_list = create_dataset(TRAIN_DIR_POS, TRAIN_DIR_NEG)
     print(X_train.shape, y_train.shape)
     print(*image_list, sep = '\n')
+
+print('check')

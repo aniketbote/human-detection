@@ -17,7 +17,7 @@ def L2_normalize(vector, eps=1e-5):
         vector: hog vector
         eps: eps to avoid exception
     '''
-    return vector / np.sqrt(np.sum(vector ** 2) + eps ** 2)
+    return np.abs(vector / np.sqrt(np.sum(vector ** 2) + eps ** 2))
 
 def calculate_hog_feature_of_cell(number_of_orientations, gradient_magnitude, orientation_angle):
     '''
@@ -28,17 +28,42 @@ def calculate_hog_feature_of_cell(number_of_orientations, gradient_magnitude, or
         gradient_magnitude: vertical and horizontal gradient
         orientation_angle: angle corresponding to magnitude
     '''
-    histogram_bin_width = int(180 / number_of_orientations)
     hog = np.zeros(number_of_orientations)
+    histogram_bin = {0:10, 1:30, 2:50, 3:70, 4:90, 5:110, 6:130, 7:150, 8:170}
+    bin_centre = [10, 30, 50, 70, 90, 110, 130, 150, 170, 190]
+    
     for i in range(orientation_angle.shape[0]):
         for j in range(orientation_angle.shape[1]):
             orientation = orientation_angle[i, j]
-            if orientation == 180:
-                orientation = 0
-            lower_bin_idx = int(orientation / histogram_bin_width)
-            hog[lower_bin_idx] += gradient_magnitude[i, j]
-
-    return hog / (gradient_magnitude.shape[0] * gradient_magnitude.shape[1])
+            for k in range(len(bin_centre)):
+                if orientation <= bin_centre[k]:
+                    left_bin = k - 1
+                    if left_bin == -1:
+                        left_bin = 0
+                        right_bin = 8
+                        break
+                    if left_bin == 8:
+                        right_bin = 0
+                        break
+                    right_bin = k
+                    break
+            if orientation > 170 and orientation < 180:
+                right_val = ((180 - orientation) + 10) / 20* gradient_magnitude[i, j]
+                left_val = gradient_magnitude[i, j] - right_val
+                hog[left_bin] += right_val
+                hog[right_bin] += left_val
+            elif orientation > 0 and orientation < 10:
+                left_val = (orientation + 10) / 20 * gradient_magnitude[i, j]
+                right_val = gradient_magnitude[i, j] - left_val
+                hog[left_bin] += left_val
+                hog[right_bin] += right_val
+            elif orientation > 10 and orientation < 170:
+                left_val= gradient_magnitude[i, j] * abs(histogram_bin[right_bin] - orientation) / 20
+                right_val = gradient_magnitude[i, j] * abs(orientation - histogram_bin[left_bin]) / 20
+                hog[left_bin] += left_val
+                hog[right_bin] += right_val
+    print(hog)
+    return hog
 
 
 def histogram_oriented_gradient_features(image: np.ndarray,
@@ -83,11 +108,17 @@ def histogram_oriented_gradient_features(image: np.ndarray,
     #number of blocks along Y-axis
     n_blocks_along_y_axis = (n_cells_along_y_axis - cells_per_block_y) + 1
     
-    #Gradient magnitude by adding Gx + Gy
-    magnitudes = np.hypot(gradient_Gx, gradient_Gy)
+    #Gradient magnitude by adding Gx + Gy 
+    magnitudes = abs(np.hypot(gradient_Gx, gradient_Gy))
+    if (magnitudes.any() < 0) and (magnitudes.any() > 255):
+        print('not normalised')
+    # magnitudes /= magnitudes.max() * 255
+    print(magnitudes)
+    
 
     #Gradient angle
-    orientations = np.rad2deg(np.arctan2(gradient_Gy, gradient_Gx)) % 180
+    orientations = abs(np.rad2deg(np.arctan2(gradient_Gy, gradient_Gx)) % 180)
+    print(orientations)
 
     #Initialising hog cells as numpy array
     hog_cells = np.zeros((n_cells_along_x_axis, n_cells_along_y_axis, n_orientations))
@@ -124,4 +155,19 @@ def histogram_oriented_gradient_features(image: np.ndarray,
             hog_blocks_normalized[it_blocky, it_blocksx] = L2_normalize(hog_block)
 
     return hog_blocks_normalized.ravel()
+
+
+if __name__ == "__main__":
+     sample = np.array([
+        [120, 125, 212, 239, 120, 125, 212, 239],
+        [90, 100, 180, 200, 120, 125, 212, 239],
+        [85, 195, 200, 210, 120, 125, 212, 239],
+        [75, 212, 255, 195, 120, 125, 212, 239],
+        [120, 125, 212, 239, 120, 125, 212, 239],
+        [90, 100, 180, 200, 120, 125, 212, 239],
+        [85, 195, 200, 210, 120, 125, 212, 239],
+        [75, 212, 255, 195, 120, 125, 212, 239]
+    ])
+
+output =  histogram_oriented_gradient_features(sample, n_orientations=9, pixels_per_cell=(8, 8),  cells_per_block=(2, 2))
 

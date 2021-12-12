@@ -7,6 +7,7 @@ Project group members:
 
 import numpy as np
 from collections import Counter
+from histogram_oriented_gradient_feature import histogram_oriented_gradient_features
 
 class KNNClassifier:
     '''
@@ -81,7 +82,7 @@ if __name__ == "__main__":
         [9,9,9,9,9,9,9,9,9],
         [4,8,3,5,9,1,2,3,4]
     ])
-
+    
     y_train = np.array([1,1,0,0,1])
 
     X_test = np.array([
@@ -93,3 +94,5 @@ if __name__ == "__main__":
     print(*zip(knn_model.compute_histogram_overlap(X_test[0]), y_train), sep="\n")
     
     print(knn_model.predict(X_test))      
+
+   
