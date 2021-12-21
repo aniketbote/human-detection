@@ -9,8 +9,8 @@ Project group members:
 import os
 import numpy as np
 from skimage.io import imread
-from histogram_oriented_gradient_feature import histogram_oriented_gradient_features
-from perform_grayscale_conversion import grayscale_conversion 
+from hog import HOG
+from grayscale import convert_to_grayscale 
 
 def load_data(path):
     '''
@@ -27,13 +27,17 @@ def load_data(path):
     matrix = []
     image_list = []
 
+    # Initialize HOG object 
+    hog_obj = HOG(n_bins=9, cell_size=(8,8), block_size=(2,2), step_size=1)
+
     # Iterate over all the images in path
     for image in os.listdir(path):
         # Read and convert the images to grayscale
-        img = grayscale_conversion(imread(os.path.join(path,image)))
+        img = convert_to_grayscale(imread(os.path.join(path,image)))
 
         # Compute hog features
-        fd = histogram_oriented_gradient_features(img, n_orientations=9, pixels_per_cell=(8, 8),  cells_per_block=(2, 2))
+        fd = hog_obj(img)
+
         # Add hog features to matrix
         matrix.append(fd)
         
