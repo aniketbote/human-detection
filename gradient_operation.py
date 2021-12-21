@@ -26,20 +26,23 @@ def perform_gradient_operation(image):
     m = np.sqrt(np.square(dfdx) + np.square(dfdy))
     
     # Normalize gradient magnitude
-    m = np.nan_to_num((np.absolute(m) / (3 * 255.0)) * 255.0)
+    maximum_gradient_magnitude = np.sqrt((3 * 255.0)**2 + (3 * 255.0)**2)
+    print(maximum_gradient_magnitude)
+    m = np.nan_to_num((np.absolute(m) / maximum_gradient_magnitude) * 255.0)
 
-    # Compute gradient angle
-    theta = np.nan_to_num(abs(np.degrees(np.arctan2(dfdy, dfdx))))
-
-    return np.round(m), np.round(theta)
+    # Compute gradient angle, convert the range from [-180, 180] --> [0, 360] --> [0,180]
+    theta = ((np.nan_to_num(np.degrees(np.arctan2(dfdy, dfdx))) + 360) % 360) % 180
+    
+    return np.round(m), theta
 
 if __name__ == "__main__":
     from skimage.io import imread
-    from perform_grayscale_conversion import grayscale_conversion
-    # image =grayscale_conversion(imread("data\Training images (Pos)\crop_000010b.bmp"))
+    from grayscale import convert_to_grayscale
+    # image =convert_to_grayscale(imread("data\Training images (Pos)\crop_000010b.bmp"))
     np.random.seed(10)
     image = np.random.randint(0,255, (16,8))
-    print(image) # gy = 282 gx = 88 norm = 295.4115773
+    print(image) # 1,1 -- gx = 282 gy = 88 norm = 69.62 --> 70  1,2 -- gx = -162 gy = -152 norm = 52.35 --> 52 angle = 43.17
+    print("****")
     mag , ang = perform_gradient_operation(image)
     print(mag)
     print("&&&&")
