@@ -1,6 +1,7 @@
 # User directories / files
 temp.ipynb
 test.csv
+mistakes.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

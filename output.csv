@@ -1,11 +1,11 @@
 Test image,Correct Classification,"File name of 1 NN, distance & classification","File name of 2 NN, distance & classification","File name of 3 NN, distance & classification",Classification from 3-NN
-crop001034b.bmp,Human,"no_person__no_bike_213_cut.bmp, 0.7336668336082461, No-human","crop001030c.bmp, 0.7294024011432504, Human","crop001672b.bmp, 0.7223239802758075, Human",Human
-crop001070a.bmp,Human,"00000053a_cut.bmp, 0.5739406242357616, No-human","crop001672b.bmp, 0.5664815372959556, Human","crop001030c.bmp, 0.5588534520124404, Human",Human
-crop001278a.bmp,Human,"crop001672b.bmp, 0.6644924196162247, Human","crop001008b.bmp, 0.6644803513894473, Human","crop001275b.bmp, 0.6612591918202027, Human",Human
-crop001500b.bmp,Human,"crop001672b.bmp, 0.6375031875182045, Human","00000091a_cut.bmp, 0.6340794399430628, No-human","no_person__no_bike_247_cut.bmp, 0.6263677840003455, No-human",No-human
-person_and_bike_151a.bmp,Human,"crop001030c.bmp, 0.6062773396475193, Human","crop001008b.bmp, 0.5981380328167933, Human","crop001275b.bmp, 0.5977427438086828, Human",Human
-00000003a_cut.bmp,No-human,"00000053a_cut.bmp, 0.682725942891812, No-human","crop001672b.bmp, 0.664905879457301, Human","crop001030c.bmp, 0.6539579212985713, Human",Human
-00000090a_cut.bmp,No-human,"00000093a_cut.bmp, 0.5643484539042891, No-human","00000057a_cut.bmp, 0.5521031342789996, No-human","crop001672b.bmp, 0.5178255465982206, Human",No-human
-00000118a_cut.bmp,No-human,"00000093a_cut.bmp, 0.6454863451199095, No-human","00000053a_cut.bmp, 0.642095127279852, No-human","no_person__no_bike_259_cut.bmp, 0.6351072403390352, No-human",No-human
-no_person__no_bike_258_Cut.bmp,No-human,"crop001275b.bmp, 0.5803887058082121, Human","crop001672b.bmp, 0.5800800850018079, Human","no_person__no_bike_259_cut.bmp, 0.572349981355374, No-human",Human
-no_person__no_bike_264_cut.bmp,No-human,"crop001030c.bmp, 0.5472699719958976, Human","00000053a_cut.bmp, 0.5420508155332728, No-human","01-03e_cut.bmp, 0.5365783544064912, No-human",No-human
+crop001034b.bmp,Human,"crop001672b.bmp, 0.633046784386743, Human","00000053a_cut.bmp, 0.6147205525853467, No-human","crop001275b.bmp, 0.6121293383351359, Human",Human
+crop001070a.bmp,Human,"00000053a_cut.bmp, 0.46735984731920455, No-human","person_and_bike_026a.bmp, 0.465680071990819, Human","crop001672b.bmp, 0.4640126378355185, Human",Human
+crop001278a.bmp,Human,"crop001672b.bmp, 0.5647235140416456, Human","crop001008b.bmp, 0.554598677411967, Human","crop001275b.bmp, 0.5536389120788475, Human",Human
+crop001500b.bmp,Human,"crop001672b.bmp, 0.5359710434046056, Human","00000091a_cut.bmp, 0.5302199445779773, No-human","crop001275b.bmp, 0.5184207093107551, Human",Human
+person_and_bike_151a.bmp,Human,"crop001030c.bmp, 0.47575943366604184, Human","person_and_bike_026a.bmp, 0.47107966099826876, Human","crop001275b.bmp, 0.46684943368279924, Human",Human
+00000003a_cut.bmp,No-human,"00000053a_cut.bmp, 0.5469676057813936, No-human","crop001672b.bmp, 0.5429545706539562, Human","00000093a_cut.bmp, 0.5157980114433904, No-human",No-human
+00000090a_cut.bmp,No-human,"00000093a_cut.bmp, 0.44710339636116, No-human","00000057a_cut.bmp, 0.44065555223199815, No-human","crop001672b.bmp, 0.42402320069621907, Human",No-human
+00000118a_cut.bmp,No-human,"00000093a_cut.bmp, 0.5272687293959271, No-human","00000053a_cut.bmp, 0.5251704330636494, No-human","00000091a_cut.bmp, 0.5154436834465059, No-human",No-human
+no_person__no_bike_258_Cut.bmp,No-human,"00000057a_cut.bmp, 0.4641716035938562, No-human","crop001672b.bmp, 0.461712238138565, Human","person_and_bike_026a.bmp, 0.4562583470148035, Human",Human
+no_person__no_bike_264_cut.bmp,No-human,"00000053a_cut.bmp, 0.4081540716716063, No-human","crop001672b.bmp, 0.403478582281568, Human","01-03e_cut.bmp, 0.39805787747097965, No-human",No-human

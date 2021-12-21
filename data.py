@@ -1,5 +1,5 @@
 '''
-Computer Vision Midterm Project
+Computer Vision Final Project
 Project group members:  
     1. Aniket Bote (N12824308)
     2. Sindhu Harish (N19806874)
