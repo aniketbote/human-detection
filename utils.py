@@ -1,5 +1,5 @@
 '''
-Computer Vision Midterm Project
+Computer Vision Final Project
 Project group members:  
     1. Aniket Bote (N12824308)
     2. Sindhu Harish (N19806874)
@@ -48,9 +48,3 @@ def apply_discrete_convolution(image, mask):
             output_arr[i+rpi_m][j+rpi_n] = np.sum(img_slice * mask)
 
     return output_arr
-
-# A function to convert negative angles to positive angles
-def get_positive_angle(angle):
-    pos_angle = angle.copy()
-    pos_angle[pos_angle<0] += 360
-    return pos_angle
