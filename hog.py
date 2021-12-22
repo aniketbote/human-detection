@@ -1,8 +1,23 @@
+'''
+Computer Vision Final Project
+Project group members:  
+    1. Aniket Bote (N12824308)
+    2. Sindhu Harish (N19806874)
+'''
 import numpy as np
 from gradient_operation import perform_gradient_operation
 
 class HOG:
     def __init__(self, n_bins, cell_size, block_size, step_size, max_m = 180):
+        '''
+        Initialize the HOG class
+        Args:
+            n_bins: Number of bins
+            cell_size: A tuple containing cell size in pixels
+            block_size: A tuple containing block size using cells
+            step_size: The step to take in order to create overlapping blocks (Using cells)
+            max_m: Maximum allowed angle
+        '''
         self.n_bins = n_bins
         self.bin_range = max_m / n_bins 
         self.cell_size = cell_size
@@ -10,15 +25,40 @@ class HOG:
         self.step_size = step_size
     
     def __call__(self, img):
+        '''
+        Function that returns hog descriptor
+        Args:
+            img: The grayscale image
+        Returns:
+            HOG descriptor array
+        '''
+        # Computes gradient magnitude and gradient angle
         gradient_magnitude, gradient_angle = perform_gradient_operation(img)
         return self.compute_hog_features(gradient_magnitude, gradient_angle)
 
     def get_bins_and_fraction(self, g):
+        '''
+        Function to compute the bin numbers and fraction of magintude that goes into respectective bin
+        Args:
+            g: Gradient angle
+        Returns:
+            bin_i: Left bin number
+            bin_j: Right bin number
+            fraction_i = Fraction of magnitude that goes into left bin
+            fraction_j = Fraction of magnitude that goes into right bin
+        '''
+        # Covert the gradient angle range from 0-180 --> 10 - 190 and divide the angle by 20 to efficintly calculate the right bin. j ranges from 0-9
+        # This is done to compute the fraction with ease
         j = int(np.floor((g + self.bin_range/2) / self.bin_range))
+        # Left bin --> Right bin - 1. i ranges from -1 - 8
         i = int(j - 1)
+        # Fraction for left bin --> distance of g from right bin center/ bin range
         fraction_i = ((self.bin_range * j + self.bin_range/2) - g) / self.bin_range
+        # Fraction for right bin --> distance of g from left bin center/ bin range
         fraction_j = (g - (self.bin_range * i + self.bin_range/2)) / self.bin_range
+        # Use modulo operator to compute the true bin value
         bin_j = j  % self.n_bins
+        # Use modulo operator to compute the true bin value
         bin_i = (bin_j - 1) % self.n_bins
         return bin_i, bin_j, fraction_i, fraction_j
     
@@ -29,37 +69,73 @@ class HOG:
         Args:
             vector: hog block vector
             epsilon: epsilon to avoid exception
+
+        Returns:
+            Normalized vector
         '''
         return vector / np.sqrt(np.sum(vector ** 2) + epsilon ** 2)
 
     def compute_hog_cell(self, m_cell, g_cell):
+        '''
+        Function to compute hog features for a cell
+        Args:
+            m_cell: Cell containing maginitude 
+            g_cell: Cell containing gradient angle
+        Returns:
+            Hog feature array for a cell
+        '''
+        # Initialize empty hog array
         hog_values = np.zeros((self.n_bins))
+
+        # Iterate through range of all magnitude and gradient angles
         for i in range(m_cell.shape[0]):
             for j in range(m_cell.shape[1]):
+                # Get the bins and fractions for gradient value
                 bin_1, bin_2, fraction_1, fraction_2 = self.get_bins_and_fraction(g_cell[i][j])
+                # Add the magnitude to respective bins based of fractions
                 hog_values[bin_1] = hog_values[bin_1] + m_cell[i][j] * fraction_1
+                # Add the magnitude to respective bins based of fractions
                 hog_values[bin_2] = hog_values[bin_2] + m_cell[i][j] * fraction_2
         return hog_values
 
     def compute_hog_features(self, gradient_magnitude, gradient_angle):
+        '''
+        Function to compute hog features
+        Args:
+            gradient_magnitude: The gradient magnitude
+            gradient_angle: The gradient angles
+        '''
+        # compute height and width of image
         height, width = gradient_magnitude.shape
+        # compute number of cells in the image
         n_cells_x, n_cells_y =  int(height / self.cell_size[0]), int(width / self.cell_size[1])
+        # compute numbr of blocks in the image 
         n_blocks_x, n_blocks_y = int(((n_cells_x - self.block_size[0]) / self.step_size) + 1), int(((n_cells_y - self.block_size[1]) / self.step_size) + 1)
 
+        # Initialize zeros for all cell
         hog_cells = np.zeros((n_cells_x, n_cells_y, self.n_bins))
+        # Iterate over the range of all cells in image
         for x in range(n_cells_x):
             for y in range(n_cells_y):
+                # Get the cell for gradient magnitude
                 m_block = gradient_magnitude[x * self.cell_size[0]: (x + 1) * self.cell_size[0], y * self.cell_size[1]: (y + 1) * self.cell_size[1]]
+                # Get the cell for gradient angle
                 g_block = gradient_angle[x * self.cell_size[0]: (x + 1) * self.cell_size[0], y * self.cell_size[1]: (y + 1) * self.cell_size[1]]
+                # Compute hog features for cell
                 hog_values_cell = self.compute_hog_cell(m_block, g_block)
+                # Assign the hog features to respective cell
                 hog_cells[x, y] = hog_values_cell
         
+        # Initialize empty hog descriptor
         hog_descriptor = []
+        # Iterate over the range of the blocks
         for x in range(n_blocks_x):
             for y in range(n_blocks_y):
+                # Get the hog features for all the cells included in 1 block
                 block = hog_cells[x : x + self.block_size[0], y : y + self.block_size[1]]
+                # Flatten the hog features into vector, apply L2 normalization and append into the hog descriptor
                 hog_descriptor += list(self.l2_normalize(block.ravel()))
-        
+        # Return the hog descriptor
         return np.array(hog_descriptor)
 
     
