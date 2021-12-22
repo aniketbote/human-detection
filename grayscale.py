@@ -15,7 +15,9 @@ def convert_to_grayscale(image):
         Return:
             image: grayscale converted image
     '''
+    # Segregate R,G,B channels
     R, G, B = image[:,:,0], image[:,:,1], image[:,:,2]
+    # Apply grayscale conversion to R, G, B channel
     imgGray = np.round(0.299 * R + 0.587 * G + 0.114 * B)   
     return  imgGray
 
