@@ -27,7 +27,6 @@ def perform_gradient_operation(image):
     
     # Normalize gradient magnitude
     maximum_gradient_magnitude = np.sqrt((3 * 255.0)**2 + (3 * 255.0)**2)
-    print(maximum_gradient_magnitude)
     m = np.nan_to_num((np.absolute(m) / maximum_gradient_magnitude) * 255.0)
 
     # Compute gradient angle, convert the range from [-180, 180] --> [0, 360] --> [0,180]
