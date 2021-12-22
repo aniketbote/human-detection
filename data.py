@@ -66,6 +66,10 @@ def load_data(path):
         # Compute hog features
         fd = hog_obj(img)
 
+        #ASCII text files with hog feature values
+        if image == 'crop001028a.bmp' or image == 'crop001030c.bmp' or image == '00000091a_cut.bmp' or image == 'crop001278a.bmp' or image == 'crop001500b.bmp' or image == '00000090a_cut.bmp':
+            np.savetxt('hogvalues/' + image + '_hogvalue.txt', fd)
+            
         # Add hog features to matrix
         matrix.append(fd)
         
