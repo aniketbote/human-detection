@@ -25,7 +25,7 @@ def perform_gradient_operation(image):
     # Compute magnitude of the gradient
     m = np.sqrt(np.square(dfdx) + np.square(dfdy))
     
-    # Normalize gradient magnitude
+    # Normalize gradient magnitude and set zero where the operator goes beyond the border
     maximum_gradient_magnitude = np.sqrt((3 * 255.0)**2 + (3 * 255.0)**2)
     m = np.nan_to_num((np.absolute(m) / maximum_gradient_magnitude) * 255.0)
 
