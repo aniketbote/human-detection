@@ -4,7 +4,13 @@ Project group members:
     1. Aniket Bote (N12824308)
     2. Sindhu Harish (N19806874)
 '''
+import os
+from numpy import uint8
 import pandas as pd
+from skimage.io import imread, imsave
+
+from grayscale import convert_to_grayscale
+from gradient_operation import perform_gradient_operation
 
 def generate_table(y_true, y_pred, topk, train_image_list, test_image_list):
     '''
@@ -50,6 +56,32 @@ def generate_table(y_true, y_pred, topk, train_image_list, test_image_list):
     # Return the dataframe
     return df
 
+def save_normalized_images(pos_dir, neg_dir, save_dir):
+    '''
+    Function to save the normalized images
+    Args:
+        pos_dir: Path of positive directory
+        neg_dir: Path of negative directory
+        save_dir: Path to save the normalized images
+    '''
+    # Iterate over all the images in pos dir
+    for image in os.listdir(pos_dir):
+        # Read and convert the images to grayscale
+        img = convert_to_grayscale(imread(os.path.join(pos_dir,image)))
+        # Compute the gradient magnitude
+        gradient_magnitude, gradient_angle = perform_gradient_operation(img)
+        # Save the images
+        imsave(os.path.join(save_dir,os.path.basename(image)), gradient_magnitude.astype(uint8))
+
+    # Iterate over all the images in neg dir
+    for image in os.listdir(neg_dir):
+        # Read and convert the images to grayscale
+        img = convert_to_grayscale(imread(os.path.join(neg_dir,image)))
+        # Compute the gradient magnitude
+        gradient_magnitude, gradient_angle = perform_gradient_operation(img)
+        # Save the images
+        imsave(os.path.join(save_dir,os.path.basename(image)), gradient_magnitude.astype(uint8))
+    
 if __name__ == "__main__":
     y_pred = [0,1]
     y_true = [0,1]
@@ -62,3 +94,7 @@ if __name__ == "__main__":
     
     out_df = generate_table(y_true, y_pred, topk, image_list, test_image_list)
     out_df.to_csv("test.csv", index=False)
+    TEST_DIR_POS = "data/Test images (Pos)"
+    TEST_DIR_NEG = "data/Test images (Neg)"
+    IMAGE_SAVE_PATH = "Output/normalized_images"
+    save_normalized_images(TEST_DIR_POS, TEST_DIR_NEG, IMAGE_SAVE_PATH)
