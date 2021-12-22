@@ -1,3 +1,9 @@
+'''
+Computer Vision Final Project
+Project group members:  
+    1. Aniket Bote (N12824308)
+    2. Sindhu Harish (N19806874)
+'''
 import pandas as pd
 
 def generate_table(y_true, y_pred, topk, train_image_list, test_image_list):
