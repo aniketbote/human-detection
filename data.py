@@ -11,6 +11,29 @@ import numpy as np
 from skimage.io import imread
 from hog import HOG
 from grayscale import convert_to_grayscale 
+from gradient_operation import perform_gradient_operation
+import os
+import argparse
+import shutil
+import cv2
+
+#Logic to write the normalized gradient magnitude test images
+#Default folder to save - TestNormalisedImages
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '--output_folder',
+    type=str,
+    default='TestNormalisedImages',
+    required=False,
+    help='output folder to save processed images'                        
+)
+
+args = parser.parse_args()
+
+if os.path.exists(args.output_folder):
+    shutil.rmtree(args.output_folder)
+
+os.makedirs(args.output_folder)
 
 def load_data(path):
     '''
@@ -33,7 +56,12 @@ def load_data(path):
     # Iterate over all the images in path
     for image in os.listdir(path):
         # Read and convert the images to grayscale
-        img = convert_to_grayscale(imread(os.path.join(path,image)))
+        
+        img = convert_to_grayscale(imread(os.path.join(path,image))) 
+
+        if path == 'data/Test images (Pos)' or path == 'data/Test images (Neg)':
+            m, theta = perform_gradient_operation(img) 
+            cv2.imwrite(os.path.join(args.output_folder, image + '_normalized.bmp'), m)
 
         # Compute hog features
         fd = hog_obj(img)
